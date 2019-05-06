@@ -156,10 +156,3 @@ void suppression_graphe(T_SOMMET* graphe,int nbsommet){
 	free(graphe);
 	}
 
-int main(){
-	int nbsommet=0;
-	int* pnbsommet=&nbsommet;
-
-	T_SOMMET* graphe=remplir_graphe("graphe1.txt",pnbsommet);
-	afficher_graphe(graphe,nbsommet);
-}
