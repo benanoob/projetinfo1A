@@ -1,19 +1,25 @@
-void afficherTas(T_SOMMET* tas,int n){
-  for (i=0,i<n,i++){
+#include "graphe.h"
+#include "tas.h"
+#include <stdlib.h>
+
+
+void afficheTas(T_SOMMET** tas,int n){
+  int i;
+  for (i=0;i<n;i++){
     affiche_sommet(tas[i]);
   }
 }
 
-T_SOMMET* creerTas(int n){
-  return(calloc(n,sizeof(T_SOMMET)));
+T_SOMMET** creerTas(int n){
+  return(calloc(n,sizeof(T_SOMMET*)));
 }
 
-void augmenteTas(T_SOMMET* tas, n){
-  int pere = tas[(n-1)/2];
-  int fils = tas[n-1];
+void augmenteTas(T_SOMMET** tas,int n){
+  T_SOMMET* pere = tas[(n-1)/2];
+  T_SOMMET* fils = tas[n-1];
   int i = n-1;
 
-  if (pere<fils){
+  if (pere->F < fils->F){
     return;
   }
   do{
@@ -23,18 +29,16 @@ void augmenteTas(T_SOMMET* tas, n){
     fils = tas[i];
     pere = tas[(i-1)/2];
   }
-  while (pere>fils);
+  while (pere->F > fils->F);
 }
 
-void descendreTas (int* tas, int n) {
+void descendreTas (T_SOMMET** tas, int n) {
   int  i = 0;
-  int fils1 = tas[2*(i+1)];
-  int fils2 = tas[2*(i+1) - 1];
-  int pere  = tas[i];
-  //printf("pere: %d   fils1: %d    fils2: %d \n",pere,fils1,fils2);
-
-  while((pere>fils1 || pere>fils2) && i<n){
-    if (fils1<fils2){
+  T_SOMMET* fils1 = tas[2*(i+1)];
+  T_SOMMET* fils2 = tas[2*(i+1) - 1];
+  T_SOMMET* pere  = tas[i];
+  while((pere->F > fils1->F || pere->F > fils2->F) && i<n){
+    if (fils1->F < fils2->F){
       tas[2*(i+1)] = pere;
       tas[i] = fils1;
     }
@@ -49,18 +53,19 @@ void descendreTas (int* tas, int n) {
   }
 }
 
-void supprimeSommetTas(T_SOMMET* tas, int n){
+void supprimeSommetTas(T_SOMMET** tas, int n){
   T_SOMMET* temp = tas[0];
   tas[0] = tas [n-1];
   tas[n-1] = temp;
   descendreTas(tas,n-2);
 }
 
-T_SOMMET* retourneEtSupprimeSommetTas(T_SOMMET* tas, int n){
-  T_SOMMET ret = tas[0];
+T_SOMMET* popTas(T_SOMMET** tas, int n){
+  T_SOMMET* ret = tas[0];
   supprimeSommetTas(tas,n);
   return(ret);
 }
-void libereTas(T_SOMMET* tas){
+
+void libereTas(T_SOMMET** tas){
   free(tas);
 }
