@@ -1,7 +1,9 @@
-# include <stdio.h>
-# include "graphe.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "graphe.h"
 
-T_SOMMET* creation_graphe(int nbsommet){  
+T_SOMMET* creation_graphe(int nbsommet){
 	T_SOMMET* graphe=calloc(nbsommet,sizeof(T_SOMMET));
 	}
 
@@ -9,94 +11,141 @@ T_SOMMET* creation_graphe(int nbsommet){
 
 void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, double lat){
 	psommet->nom=calloc(strlen(nom),sizeof(char));
-	strclcopy(&psommet->nom,nom);
-	psommet->line=calloc(strclen(line),sizeof(char));
-	strclcopy(&psommet->line,line);
+	strcpy(psommet->nom,nom);
+	psommet->line=calloc(strlen(line),sizeof(char));
+	strcpy(psommet->line,line);
 	psommet->x=longi;
 	psommet->y=lat;
+	psommet->ListeFermee=0;
 	psommet->voisins=NULL;
+	psommet->F=-1;
 	}
 
-void suppression_graphe(T_SOMMET graphe,nbsommet){
-	int sommet;
-	for (sommet=0,sommet<nbsommet,sommet++){
-		supprimer_arc
-		malloc}
+void affiche_arc(L_ARC voisins){
+	while(voisins!=NULL){
+		printf("mene au sommet %d\n",voisins->val.arrivee);
+		printf("avec un cout de %lf\n",voisins->val.cout);
+		voisins=voisins->suiv;
 	}
+}
+
+void affiche_sommet(T_SOMMET* psommet){
+	printf("nom %s\n",psommet->nom);
+	printf("line %s\n",psommet->line);
+	printf("x %lf\n",psommet->x);
+	printf("y %lf\n",psommet->y);
+	printf("ListeFermee %d\n",psommet->ListeFermee);
+	printf("F %d\n",psommet->F);
+	affiche_arc(psommet->voisins);
+	printf("\n");
+}
+
+void afficher_graphe(T_SOMMET* graphe,int nbsommet){
+	int i;
+	for (i=0;i<nbsommet;i++){
+		affiche_sommet( graphe+i);
+	}
+}
 
 void creation_arc(int numdepart, int numarrivee, double cout,T_SOMMET* graphe){
 	L_ARC listsuiv=(graphe+numdepart)->voisins;//on selectionne la liste de voisins associee a ce sommet de depart
-	
-	L_ARC new=calloc(1,sizeof(*L_ARC));
+
+	L_ARC new=calloc(1,sizeof(L_ARC));
 	(new->val).arrivee=numarrivee;
 	(new->val).cout=cout;
 	new->suiv=NULL;
-	
 	if(listsuiv==NULL){
 		(graphe+numdepart)->voisins=new;//on a ajoute notre nouvel arc ce qui cree la liste de successeurs
 		}
 	else{
-		L_ARC arc=listsuiv->suiv;
-		while(arc->suiv!=NULL){
-			arc=arc->suiv;//on va au bout de la liste des successeurs deja repertories
-			}	
-		arc->suiv=new; //on a ajoute notre nouvel arc a la liste de successeurs
-		
-		}	
+		new->suiv=listsuiv;
+		affiche_arc(listsuiv);
+		(graphe+numdepart)->voisins=new;
+		affiche_arc(listsuiv);
+	}
 	}
 
 
-T_SOMMET* remplir_graphe(T_SOMMET* sommet,int* pnbsommet){
-	FILE* f; 
-	int numero,nbsommet,nbarc; 
+T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet){
+	FILE* f;
+	int numero,nbsommet,nbarc;
 	double lat,longi ;
 	char line[128] ;
 	char mot[512] ;
 	f=fopen("graphe1.txt","r");
 	if (f==NULL) {
-		printf("Impossible d’ouvrir le fichier\n");
+		printf("Impossible dï¿½ouvrir le fichier\n");
 		exit(EXIT_FAILURE);
-		} 
-	/* Lecture de la premiere ligne du fichier : nombre de sommet et nombre d’arcs */ 
+		}
+	/* Lecture de la premiere ligne du fichier : nombre de sommet et nombre dï¿½arcs */
+
 	fscanf(f,"%d %d ",&nbsommet,&nbarc);
 
 	T_SOMMET* graphe=creation_graphe(nbsommet);//cree le graphe
-	if (T_SOMMET==NULL) {
+	if (graphe==NULL) {
 		printf("Impossible de creer graphe\n");
 		exit(EXIT_FAILURE);
-		} 
+		}
+	*pnbsommet=nbsommet;
+	/* Ligne de texte "Sommets du graphe" qui ne sert a rien */
 
-	/* Ligne de texte "Sommets du graphe" qui ne sert a rien */ 
 	fgets(mot,511,f);
-	
+
 	T_SOMMET* psommet;
 
 	// maintenant on parcourt tous les sommets
-	for(psommet=graphe,psommet-graphe<nbsommet,psommet++){
-		/* lecture d’une ligne de description d’un sommet */
-		/* on lit d’abord numero du sommet, la position, le nom de la ligne */ 
+	for(psommet=graphe;psommet-graphe<nbsommet;psommet++){
+		/* lecture dï¿½une ligne de description dï¿½un sommet */
+		/* on lit dï¿½abord numero du sommet, la position, le nom de la ligne */
 		fscanf(f,"%d %lf %lf %s", &(numero), &(lat), &(longi), line);
-		/* numero contient alors l’entier ou numero du sommet, lat et longi la position, line le nom de la ligne */
-		/* Le nom de la station peut contenir des separateurs comme l’espace. On utilise plutot fgets dans ce cas */ 
+		/* numero contient alors lï¿½entier ou numero du sommet, lat et longi la position, line le nom de la ligne */
+		/* Le nom de la station peut contenir des separateurs comme lï¿½espace. On utilise plutot fgets dans ce cas */
 		fgets(mot,511,f);
 		if (mot[strlen(mot)-1]<32) {mot[strlen(mot)-1]=0; }/* mot contient le nom du sommet. */
 
 		creation_sommet( psommet, mot, line, longi, lat);}
 
-	/*Pour sauter les lignes de commentaires, on peut simplement utiliser la fonction fgets sans utiliser la chaine de caracteres lue dans le fichier par */ 
+	/*Pour sauter les lignes de commentaires, on peut simplement utiliser la fonction fgets sans utiliser la chaine de caracteres lue dans le fichier par */
 	fgets(mot,511,f);
 
 	int numdepart, numarrivee;
-	double cout;	
+	double cout;
 
 	//maintenant on rempli les arcs
-	for(nbarc,nbarc>0,nbarc--){
-		//lecture de: un entier : numéro du sommet de départ 2. un entier : numéro du sommet d’arrivée 3. un réel : valeur ou coût de l’arc
+	for(nbarc;nbarc>0;nbarc--){
+		//lecture de: un entier : numï¿½ro du sommet de dï¿½part 2. un entier : numï¿½ro du sommet dï¿½arrivï¿½e 3. un rï¿½el : valeur ou coï¿½t de lï¿½arc
 		fscanf(f,"%d %d %lf", &(numdepart), &(numarrivee), &(cout));
+
 		creation_arc(numdepart,numarrivee,cout,graphe);
 		}
-	
-	/* Ne pas oublier de fermer votre fichier */ 
+
+	/* Ne pas oublier de fermer votre fichier */
 	fclose(f);
 	return(graphe);
 	}
+
+void suppression_arc(L_ARC arc){
+	L_ARC parcours=arc;
+	while(parcours!=NULL){
+		L_ARC suiv=parcours->suiv;
+		free(parcours);
+		parcours=suiv;}
+	}
+
+void suppression_graphe(T_SOMMET* graphe,int nbsommet){
+	int i;
+	for(i=0;i<nbsommet;i++){
+		suppression_arc((graphe+i)->voisins);
+		}
+	free(graphe);
+	}
+
+int rechercher_dans_arc(L_ARC arc,int numsommet){
+	while(arc!= NULL){
+		if((arc->val).arrivee==numsommet){
+			return(1);
+		}
+		arc=arc->suiv;
+	}
+	return(0);
+}
