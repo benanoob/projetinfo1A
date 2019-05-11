@@ -14,3 +14,5 @@ tas.o : tas.c
 graphe.o: graphe.c
 	$(CC) graphe.c -c $(CFLAGS)
 
+clean :
+	rm -f *.o testtas

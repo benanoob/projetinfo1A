@@ -1,6 +1,4 @@
-#include "graphe.h"
 #include "tas.h"
-#include <stdlib.h>
 
 
 void afficheTas(T_SOMMET** tas,int n){

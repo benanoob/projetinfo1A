@@ -4,21 +4,21 @@
 #include "graphe.h"
 
 T_SOMMET* creation_graphe(int nbsommet){
-	T_SOMMET* graphe=calloc(nbsommet,sizeof(T_SOMMET));
+	return(calloc(nbsommet,sizeof(T_SOMMET)));
 	}
 
 /*cree le graphe: alloue dynamiquement le tableau qui contient les sommets*/
 
-void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, double lat){
+void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, double lat, int ListeFermee, int F){
 	psommet->nom=calloc(strlen(nom),sizeof(char));
 	strcpy(psommet->nom,nom);
 	psommet->line=calloc(strlen(line),sizeof(char));
 	strcpy(psommet->line,line);
 	psommet->x=longi;
 	psommet->y=lat;
-	psommet->ListeFermee=0;
+	psommet->ListeFermee=ListeFermee;
 	psommet->voisins=NULL;
-	psommet->F=-1;
+	psommet->F=F;
 	}
 
 void affiche_arc(L_ARC voisins){
@@ -72,7 +72,7 @@ T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet){
 	double lat,longi ;
 	char line[128] ;
 	char mot[512] ;
-	f=fopen("graphe1.txt","r");
+	f=fopen(nomfichier,"r");
 	if (f==NULL) {
 		printf("Impossible d�ouvrir le fichier\n");
 		exit(EXIT_FAILURE);
@@ -103,7 +103,8 @@ T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet){
 		fgets(mot,511,f);
 		if (mot[strlen(mot)-1]<32) {mot[strlen(mot)-1]=0; }/* mot contient le nom du sommet. */
 
-		creation_sommet( psommet, mot, line, longi, lat);}
+		creation_sommet( psommet, mot, line, longi, lat, 0, -1);
+  }
 
 	/*Pour sauter les lignes de commentaires, on peut simplement utiliser la fonction fgets sans utiliser la chaine de caracteres lue dans le fichier par */
 	fgets(mot,511,f);

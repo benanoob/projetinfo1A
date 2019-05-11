@@ -1,4 +1,8 @@
-T_SOMMET** creerTas(int n ); // n designe la taille du tas
+#include "type.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+T_SOMMET** creerTas(int n); // n designe la taille du tas
 
 void augmenteTas(T_SOMMET** tas,int n);//place l'elt en position n du tableau de sorte a reformer un tas jusqua n
 
