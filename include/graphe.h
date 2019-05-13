@@ -1,5 +1,9 @@
 #include "type.h"
 
+#ifndef GRAPHE_H
+#define GRAPHE_H
+
+
 T_SOMMET* creation_graphe(int nbsommet);
 
 void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, double lat, int ListeFermee, int F);

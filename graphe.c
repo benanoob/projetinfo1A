@@ -58,7 +58,7 @@ void creation_arc(int numdepart, int numarrivee, double cout,T_SOMMET* graphe){
 		(graphe+numdepart)->voisins=new;//on a ajoute notre nouvel arc ce qui cree la liste de successeurs
 		}
 	else{
-		new->suiv=listsuiv;
+		new->suiv=(graphe+numdepart)->voisins;
 		affiche_arc(listsuiv);
 		(graphe+numdepart)->voisins=new;
 		affiche_arc(listsuiv);
