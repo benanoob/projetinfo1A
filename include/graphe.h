@@ -21,3 +21,5 @@ T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet);
 void suppression_arc(L_ARC arc);
 
 void suppression_graphe(T_SOMMET* graphe,int nbsommet);
+
+#endif 
