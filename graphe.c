@@ -30,12 +30,16 @@ void affiche_arc(L_ARC voisins){
 }
 
 void affiche_sommet(T_SOMMET* psommet){
+	if (psommet ==NULL){
+		printf("vide\n");
+		return;
+	}
 	printf("nom %s\n",psommet->nom);
 	printf("line %s\n",psommet->line);
 	printf("x %lf\n",psommet->x);
 	printf("y %lf\n",psommet->y);
 	printf("ListeFermee %d\n",psommet->ListeFermee);
-	printf("F %d\n",psommet->F);
+	printf("F %lf\n",psommet->F);
 	affiche_arc(psommet->voisins);
 	printf("\n");
 }
