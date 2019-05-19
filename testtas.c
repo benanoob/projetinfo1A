@@ -10,19 +10,19 @@ int main(){
   //creation tas de test
 
   tas[0] = & graphe[0];
-  tas[0]->F = 6;
+  tas[0]->F = 0;
 
   tas[1] = & graphe[1];
-  tas[1]->F = 5;
+  tas[1]->F = 1;
 
   tas[2] = & graphe[2];
-  tas[2]->F = 4;
+  tas[2]->F = 2;
 
   tas[3] = & graphe[3];
   tas[3]->F = 3;
 
   tas[4] = & graphe[4];
-  tas[4]->F = 2;
+  tas[4]->F = 4;
 
 
   printf(" \n \n tas original\n");
@@ -38,9 +38,16 @@ int main(){
   /* descendreTas(tas,5); */
   /* afficheTas(tas,5); */
 
-  printf("\ntas sans le sommet \n");
-  supprimeSommetTas(tas,15);
-  afficheTas(tas,15);
-  //libereTas(tas);
+  /* printf("\ntas sans le sommet \n"); */
+  /* supprimeSommetTas(tas,5); */
+  /* afficheTas(tas,5); */
+  /* //libereTas(tas); */
+
+  printf("\n on fait pop le sommet du tas\n");
+  T_SOMMET* sommetRetourné = popTas(tas,5);
+  affiche_sommet(sommetRetourné);
+
+  printf("et le tas \n");
+  afficheTas(tas,5);
 
 }
