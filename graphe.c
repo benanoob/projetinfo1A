@@ -17,6 +17,7 @@ void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, doubl
 	psommet->x=longi;
 	psommet->y=lat;
 	psommet->ListeFermee=0;
+	psommet->ListeOuverte=0;
 	psommet->voisins=NULL;
 	psommet->F=-1;
 	psommet->G= 0;
@@ -41,6 +42,7 @@ void affiche_sommet(T_SOMMET* psommet){
 	printf("x %lf\n",psommet->x);
 	printf("y %lf\n",psommet->y);
 	printf("ListeFermee %d\n",psommet->ListeFermee);
+	printf("ListeFermee %d\n",psommet->ListeOuverte);
 	printf("F %lf\n",psommet->F);
 	printf("G %lf\n",psommet->G);
 	printf("rang du pere %d\n",psommet->pere);
@@ -65,12 +67,12 @@ void creation_arc(int numdepart, int numarrivee, double cout,T_SOMMET* graphe){
 	if(listsuiv==NULL){
 		(graphe+numdepart)->voisins=new;//on a ajoute notre nouvel arc ce qui cree la liste de successeurs
 		}
-	else{
+	else{/*
 <<<<<<< HEAD
 		new->suiv=listsuiv->voisins;
-=======
+=======*/
 		new->suiv=(graphe+numdepart)->voisins;
->>>>>>> 8ac0b33c883a7acb33f129094afaeb469d16d1f8
+//>>>>>>> 8ac0b33c883a7acb33f129094afaeb469d16d1f8
 		affiche_arc(listsuiv);
 		(graphe+numdepart)->voisins=new;
 		affiche_arc(listsuiv);

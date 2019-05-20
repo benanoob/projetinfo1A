@@ -1,6 +1,6 @@
 CC = clang
 CFLAGS = -Wall -Wextra -g -I include
-LFAGS = -lm
+LFLAGS = -lm
 
 
 astarte : astarte.o graphe.o tas.o

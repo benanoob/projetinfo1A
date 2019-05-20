@@ -52,7 +52,7 @@ void init_tas(T_SOMMET** tas,T_SOMMET* graphe,int nbsommet){
 }
 
 
-//cherche un sommet dans le graphe par son nom et en retourne le numero 
+//cherche un sommet dans le graphe par son nom et en retourne le numero
 int trouver_sommet(char* depart,T_SOMMET* graphe,int nbsommet){
   int a=0;
   while(a<nbsommet){
@@ -62,6 +62,17 @@ int trouver_sommet(char* depart,T_SOMMET* graphe,int nbsommet){
     a+=1;
   }
 return(nbsommet+1);}
+
+
+void affiche_chemin(T_SOMMET* graphe, int depart, int arrivee){
+	double cout=0;
+	while(depart!=arrivee){
+		printf("on passe par %s \n",(graphe+depart)->nom);
+    cout+=(graphe->voisins->val).cout;
+    depart=(graphe+depart)->pere;
+	}
+  printf("on arrive à %s \n avec un cout de %lf\n",(graphe+depart)->nom,cout);
+	}
 
 
 int main(){
@@ -81,7 +92,6 @@ int main(){
 
   // debut boucle initialisation F
 
-  (graphe+d)->F=H(d,a,graphe);
 
   /* int s=0; */
   /* for (s=0;s<nbsommet;s++){ */
@@ -94,26 +104,32 @@ int main(){
   //initialisation tas
     T_SOMMET** tas=creerTas(nbsommet);
     int n_tas=0;
-    // ajouter depart au tas
+    *tas=graphe+d;// ajouter depart au tas
+
     int k=d;
-
-
+    (graphe+k)->F=H(k,a,graphe);
+    (graphe+k)->G=0;
     //algorithme iteratif
     while(k!=a && n_tas!=0){
-      augmenteTas(tas,n_tas);// on remet le tas en forme de tas
-      T_SOMMET* stockage =popTas(tas,n_tas);//premier element du tas: le meilleur chemin
+      //augmenteTas(tas,n_tas);// on remet le tas en forme de tas
+      T_SOMMET* stockage =popTas(tas,&n_tas);//premier element du tas: le meilleur chemin
       k=stockage-graphe;//on cherche sa position dans le graphe plus commode à manipuler
       if (k!=a){//on est pas arrivé
         (graphe+k)->ListeFermee=1;
-        //virer k de LO
+        //virer k de LO deja fait et ??? enonce
         L_ARC arc=(graphe+k)->voisins; // liste des voisins
         while(arc!=NULL){
           int s=(arc->val).arrivee;//on considère le sommet d'arrivee s
           if ((graphe+s)->ListeFermee==0){
-            int posdanstas=0;
+            //int posdanstas=0;
 
-            if(cherche_dans_tas(tas,graphe,s,n_tas,&posdanstas )==0){//pas dans liste ouverte
-              T_SOMMET* stock=*(tas+(k+1)/2);
+            if((graphe+s)->ListeOuverte ==0){//pas dans liste ouverte
+              (graphe+s)->pere=k;
+              (graphe+s)->G=(graphe+k)->G+cout(k,s,graphe);
+              (graphe+s)->F=(graphe+s)->G+H(s,a,graphe);
+              *(tas+n_tas)=graphe+s;
+              augmenteTas(tas,&n_tas);
+              /*T_SOMMET* stock=*(tas+(k+1)/2);
               *(tas+(k+1)/2)=graphe+s;
               *(tas+posdanstas)=stock;//Pere(s)←k
               (graphe+k)->F=((graphe+k)->F)-H(k, a, graphe)+ cout(k,s,graphe)+ H(s,a,graphe);
@@ -122,41 +138,36 @@ int main(){
               *(tas+posdanstas)=stock;//on a inséré le nouveau sommet dans le tas
 		n_tas=max(n_tas,posdanstas);
 		n_tas=n_tas+1;
-              augmentetas(tas,n_tas);
+              augmentetas(tas,n_tas);*/
             }
 
             else{
+              if((graphe+k)->G+cout(k,s,graphe)<(graphe+s)->G){
+                (graphe+s)->pere=k;
+                (graphe+s)->G=(graphe+k)->G+cout(k,s,graphe);
+    //            supprimerElementKTas(tas,&n_tas,s);//fct benano
+                (graphe+s)->F=(graphe+s)->G+H(s,a,graphe);
+                *(tas+n_tas)=graphe+s;
+                augmenteTas(tas,&n_tas);
+              }
+              /*
               if(((graphe+k)->F)-H(k,a,graphe)+cout(k,s,graphe)<((graphe+s)->F)-H(s,a,graphe)){
                 T_SOMMET* stock=*(tas+(k+1)/2);
                 *(tas+(k+1)/2)=graphe+s;
                 *(tas+posdanstas)=stock;//Pere(s)←k
 		supprimeSommetTas(tas,posdanstas);
 		(*(tas+posdanstas))->F;
-		
+
               	(graphe+k)->F=((graphe+k)->F)-H(k, a, graphe)+ cout(k,s,graphe)+ H(s,a,graphe);
 		n_tas=n_tas+1;
 		augmenteTas(tas,n_tas);
-		
+*/
               }
             }
           }
           arc=arc->suiv;
         }
       }
+      affiche_chemin(graphe,d,a);
+      return(NULL);
 }
-
-void affiche_chemin(tas tas,int nbsommet){
-	int i=0;
-	double cout=0
-	while(i!=1){
-		printf("on passe par %s \n",(*(tas+i))->nom);
-		cout+=(*(tas+i))->cout;
-		if(2*(i+1)-1>=nbsommet){
-			printf("vous voilà arrivé\n");
-			i=1;}
-		i=2*(i+1)-1;
-	}
-	printf("le cout est alors de %lf \n",cout);
-	} 
-}
-    

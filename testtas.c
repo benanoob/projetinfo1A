@@ -43,11 +43,18 @@ int main(){
   /* afficheTas(tas,5); */
   /* //libereTas(tas); */
 
-  printf("\n on fait pop le sommet du tas\n");
-  T_SOMMET* sommetRetourné = popTas(tas,5);
-  affiche_sommet(sommetRetourné);
+  /* printf("\n on fait pop le sommet du tas\n"); */
+  /* T_SOMMET* sommetRetourné = popTas(tas,5); */
+  /* affiche_sommet(sommetRetourné); */
 
-  printf("et le tas \n");
-  afficheTas(tas,5);
+  /* printf("et le tas \n"); */
+  /* afficheTas(tas,5); */
+
+  int n_tas = 5;
+  printf("on supprime l'elt 2");
+  supprimerElementKTas(tas,&n_tas,2);
+  afficheTas(tas,n_tas);
+
+
 
 }
