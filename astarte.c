@@ -10,10 +10,12 @@
 int cherche_dans_tas(T_SOMMET** tas,T_SOMMET* graphe,int search,int n_tas,int* posdanstas ){
   int i=0;
   for (i=0;i<n_tas;i++){
-    if(*(tas+i)==(graphe+search){
+    if(*(tas+i)==(graphe+search)){
+      *posdanstas=i;
       return(1);// est present
     }
   }
+  *posdanstas=-1;
   return(0);// n'est pas present
 }
 
@@ -82,7 +84,7 @@ int main(){
   (graphe+d)->F=H(d,a,graphe);
 
   int s=0;
-  for (s=0;s<nbsommets;s++){
+  for (s=0;s<nbsommet;s++){
     if(s!=a && s!= d && cout(d,s,graphe)>=0){
       (graphe+s)->F=H(s,a,nbsommet)+cout(d,s,graphe);//F(k)←G(k)←H(k, a)←∞
     }
@@ -96,7 +98,7 @@ int main(){
     init_tas(tas,graphe,nbsommet);
     T_SOMMET** stockage=tas;
     *tas= *(tas+d);
-    *(tas+d)=stockage;
+    *(tas+d)=*stockage;
     int k=d;
 
     //algorithme iteratif
@@ -108,7 +110,7 @@ int main(){
         (graphe+k)->ListeFermee=1;
         L_ARC arc=(graphe+k)->voisins;
         while(arc!=NULL){
-          int s=graphe(arc->val).arrivee;//on considère le sommet d'arrivee s
+          int s=((graphe->arc)->val).arrivee;//on considère le sommet d'arrivee s
           if ((graphe+s)->ListeFermee==0){
             int posdanstas=0;
 
@@ -158,5 +160,5 @@ void affiche_chemin(tas tas,int nbsommet){
 	}
 	printf("le cout est alors de %lf \n",cout);
 	} 
-
+}
     

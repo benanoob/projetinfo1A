@@ -9,16 +9,18 @@ T_SOMMET* creation_graphe(int nbsommet){
 
 /*cree le graphe: alloue dynamiquement le tableau qui contient les sommets*/
 
-void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, double lat, int ListeFermee, int F){
+void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, double lat){
 	psommet->nom=calloc(strlen(nom),sizeof(char));
 	strcpy(psommet->nom,nom);
 	psommet->line=calloc(strlen(line),sizeof(char));
 	strcpy(psommet->line,line);
 	psommet->x=longi;
 	psommet->y=lat;
-	psommet->ListeFermee=ListeFermee;
+	psommet->ListeFermee=0;
 	psommet->voisins=NULL;
-	psommet->F=F;
+	psommet->F=-1;
+	psommet->G= 0;
+	psommet->pere = -1;
 	}
 
 void affiche_arc(L_ARC voisins){
@@ -40,6 +42,8 @@ void affiche_sommet(T_SOMMET* psommet){
 	printf("y %lf\n",psommet->y);
 	printf("ListeFermee %d\n",psommet->ListeFermee);
 	printf("F %lf\n",psommet->F);
+	printf("G %lf\n",psommet->G);
+	printf("rang du pere %d\n",psommet->pere);
 	affiche_arc(psommet->voisins);
 	printf("\n");
 }
@@ -111,7 +115,7 @@ T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet){
 		fgets(mot,511,f);
 		if (mot[strlen(mot)-1]<32) {mot[strlen(mot)-1]=0; }/* mot contient le nom du sommet. */
 
-		creation_sommet( psommet, mot, line, longi, lat, 0, -1);
+		creation_sommet( psommet, mot, line, longi, lat);
   }
 
 	/*Pour sauter les lignes de commentaires, on peut simplement utiliser la fonction fgets sans utiliser la chaine de caracteres lue dans le fichier par */

@@ -6,7 +6,7 @@
 
 T_SOMMET* creation_graphe(int nbsommet);
 
-void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, double lat, int ListeFermee, int F);
+void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, double lat);
 
 void affiche_arc(L_ARC voisins);
 
