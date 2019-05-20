@@ -83,34 +83,32 @@ int main(){
 
   (graphe+d)->F=H(d,a,graphe);
 
-  int s=0;
-  for (s=0;s<nbsommet;s++){
-    if(s!=a && s!= d && cout(d,s,graphe)>=0){
-      (graphe+s)->F=H(s,a,nbsommet)+cout(d,s,graphe);//F(k)←G(k)←H(k, a)←∞
-    }
+  /* int s=0; */
+  /* for (s=0;s<nbsommet;s++){ */
+  /*   if(s!=a && s!= d && cout(d,s,graphe)>=0){ */
+  /*     (graphe+s)->F=H(s,a,nbsommet)+cout(d,s,graphe);//F(k)←G(k)←H(k, a)←∞ */
+  /*   } */
 
-    return(1);
-  }
+  /* } */
 
   //initialisation tas
     T_SOMMET** tas=creerTas(nbsommet);
     int n_tas=0;
-    init_tas(tas,graphe,nbsommet);
-    T_SOMMET** stockage=tas;
-    *tas= *(tas+d);
-    *(tas+d)=*stockage;
+    // ajouter depart au tas
     int k=d;
 
+
     //algorithme iteratif
-    while(k!=a && nbsommet!=0){
+    while(k!=a && n_tas!=0){
       augmenteTas(tas,n_tas);// on remet le tas en forme de tas
       T_SOMMET* stockage =popTas(tas,n_tas);//premier element du tas: le meilleur chemin
       k=stockage-graphe;//on cherche sa position dans le graphe plus commode à manipuler
       if (k!=a){//on est pas arrivé
         (graphe+k)->ListeFermee=1;
-        L_ARC arc=(graphe+k)->voisins;
+        //virer k de LO
+        L_ARC arc=(graphe+k)->voisins; // liste des voisins
         while(arc!=NULL){
-          int s=((graphe->arc)->val).arrivee;//on considère le sommet d'arrivee s
+          int s=(arc->val).arrivee;//on considère le sommet d'arrivee s
           if ((graphe+s)->ListeFermee==0){
             int posdanstas=0;
 
