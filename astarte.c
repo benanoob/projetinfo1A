@@ -31,7 +31,7 @@ double H(int sommets, int sommeta, T_SOMMET* graphe){
   double diff = fabs(xa-xs) + fabs(ya-ys);
   //printf("%lf\n",norme);
   //printf("%lf\n",sqrt(norme));
-  return(diff/5);
+  return(diff/5); //par 4 meilleur ?
   //printf("fin H\n");
 }
 
@@ -121,7 +121,7 @@ void affiche_chemin(T_SOMMET* graphe, int depart, int arrivee,int nbsommet){
 int main(){
   //initialisation
   int nbsommet;
-  T_SOMMET* graphe=ouvrir_fichier("data/grapheColorado.csv",&nbsommet);
+  T_SOMMET* graphe=ouvrir_fichier("data/grapheNewYork.csv",&nbsommet);
   //afficher_graphe( graphe, nbsommet);
   /*int i;
   printf("voici les sommets:\n");
@@ -161,7 +161,8 @@ int main(){
     T_SOMMET** tas=creerTas(nbsommet);
     int n_tas=0;
     *tas=graphe+d;// ajouter depart au tas
-     n_tas=1;
+    n_tas=1;
+    (graphe+d)->ListeOuverte = 0;
     int k=d; //init k (sommet en cours) au depart
     (graphe+k)->F=H(k,a,graphe); // F = heuristique car G =0
     (graphe+k)->G=0;
@@ -177,10 +178,13 @@ int main(){
         printf("probleme k\n"); //recherche une erreur majeure
         return(1);
       }
+
+
       if (k!=a){//tant qu'on est pas arrivé
         (graphe+k)->ListeFermee=1; //ajout k a la LF
         supprimeSommetTas(tas, &n_tas); // supprime k de la LO
-        printf("k: %d",k);
+        (graphe+k)->ListeOuverte = -1;
+        //printf("k: %d",k);
         L_ARC arc=(graphe+k)->voisins; // liste des voisins
         while(arc!=NULL){
           //printf("debut while\n");
@@ -189,8 +193,7 @@ int main(){
           //printf("s:%d, suiv:%d\n",s,arc->suiv->val.arrivee);
           if ((graphe+s)->ListeFermee==0){
             //int posdanstas=0;
-
-            if((graphe+s)->ListeOuverte ==0){//pas dans liste ouverte
+            if((graphe+s)->ListeOuverte == -1){//pas dans liste ouverte
               //printf("pasdanslisteouverte\n");
               (graphe+s)->pere=k;
               //printf("bon_pour_pere\n");
@@ -200,11 +203,15 @@ int main(){
               //printf("miseajourF\n");
               *(tas+n_tas)=graphe+s;
               //printf("augmentetas,n_tas: %d\n",n_tas);
-              augmenteTas(tas,&n_tas);
-              (graphe+s)->ListeOuverte=1;
-              //n_tas+=1;
+              (graphe+s)->ListeOuverte=augmenteTas(tas,&n_tas); // on stock la postition dans le tas pour ne pas la chercher si on a besoin de supprimer cet elt du tas plus tard
               //printf("fincasLO, n_tas: %d \n",n_tas);
-            }
+
+              printf("le sommet k est en pos %d dans le tas\n",(graphe+s)->ListeOuverte);
+              affiche_sommet(graphe+s);
+              printf("\n #####");
+              afficheTas(tas,n_tas);
+
+              }
 
             else{
               //printf("sinon\n");
@@ -214,7 +221,13 @@ int main(){
                 //printf("il y a un meilleur chemin\n");
                 (graphe+s)->pere=k;
                 (graphe+s)->G=(graphe+k)->G+cout(k,s,graphe);
-                supprimerElementKTas(tas,&n_tas,s);//fct benano
+
+                printf("le sommet k est en pos %d dans le tas\n",(graphe+s)->ListeOuverte);
+                affiche_sommet(graphe+s);
+                printf("\n #####");
+                afficheTas(tas,n_tas);
+
+                supprimerElementKTas(tas,&n_tas,(graphe+s)->ListeOuverte);//fct benano
                 (graphe+s)->F=(graphe+s)->G+H(s,a,graphe);
                 *(tas+n_tas)=graphe+s;
                 augmenteTas(tas,&n_tas);

@@ -19,7 +19,7 @@ void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, doubl
 	psommet->x=longi;
 	psommet->y=lat;
 	psommet->ListeFermee=0;
-	psommet->ListeOuverte=0;
+	psommet->ListeOuverte=-1;
 	psommet->voisins=NULL;
 	psommet->F=1000000000;
 	psommet->G= 0;
@@ -69,15 +69,10 @@ void creation_arc(int numdepart, int numarrivee, double cout,T_SOMMET* graphe){
 	if(listsuiv==NULL){
 		(graphe+numdepart)->voisins=new;//on a ajoute notre nouvel arc ce qui cree la liste de successeurs
 		}
-	else{/*
-<<<<<<< HEAD
-		new->suiv=listsuiv->voisins;
-=======*/
+	else{
 		new->suiv=(graphe+numdepart)->voisins;
-//>>>>>>> 8ac0b33c883a7acb33f129094afaeb469d16d1f8
-		//affiche_arc(listsuiv);
 		(graphe+numdepart)->voisins=new;
-		//affiche_arc(listsuiv);
+
 		}
 	}
 

@@ -26,13 +26,14 @@ int main(){
 
 
   printf(" \n \n tas original\n");
-  afficheTas(tas,nbSommet);
+  afficheTas(tas,5);
 
 
-  /* printf("\n \n tas augmenté \n"); */
-  /* augmenteTas(tas,4); */
-  /* afficheTas(tas,4); */
-  // augmente tas ok
+  // printf("\n \n tas augmenté \n"); 
+  // int tailleTas = 3;
+  // int nouvellePos = augmenteTas(tas,&tailleTas); 
+  // afficheTas(tas,4); 
+  // printf("la nouvelle pos est %d",nouvellePos);
 
   /* printf("tas descendu\n"); */
   /* descendreTas(tas,5); */
@@ -51,9 +52,9 @@ int main(){
   /* afficheTas(tas,5); */
 
   int n_tas = 5;
-  printf("on supprime l'elt 2");
-  supprimerElementKTas(tas,&n_tas,2);
-  afficheTas(tas,n_tas);
+  printf("on supprime l'elt spécifié puis on desend le tas restant");
+  supprimerElementKTas(tas,&n_tas,1);
+  afficheTas(tas,n_tas-1);
 
 
 

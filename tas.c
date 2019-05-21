@@ -5,7 +5,9 @@ void afficheTas(T_SOMMET** tas,int n){
   int i;
   for (i=0;i<n;i++){
     //affiche_sommet(tas[i])
+    if (tas[i] != NULL){
     printf("nom %s\n",tas[i]->nom);
+  }
   	/*printf("line %s\n",tas[i]->line);
   	printf("x %lf\n",tas[i]->x);
   	printf("y %lf\n",tas[i]->y);
@@ -17,18 +19,15 @@ T_SOMMET** creerTas(int n){
   return(calloc(n,sizeof(T_SOMMET*)));
 }
 
-void augmenteTas(T_SOMMET** tas,int* pn){
+int augmenteTas(T_SOMMET** tas,int* pn){ //retourne la position de l'elt dans le tas 
   int n = *pn;
   *pn+=1;
-  int i = n-1;
-  if(i<=0){
-    return;
-  }
+  int i = n; //attention ici erreure corrigée, l'elt a monter est placé en [n] et pas [n-1]dernier element avant augmentation
   T_SOMMET* pere = tas[(i-1)/2];
   T_SOMMET* fils = tas[i];
   //printf("point1\n");
   if (pere->F < fils->F){
-    return;
+    return(i);
   }
   //printf("point2.5\n");
   do{
@@ -46,6 +45,8 @@ void augmenteTas(T_SOMMET** tas,int* pn){
     //printf("point3\n");
   }
   while (i>=0 && (pere->F > fils->F));
+
+  return(i);
 
 }
 
@@ -68,7 +69,7 @@ void descendreTas (T_SOMMET** tas, int n) {
  
 
 
-  while((i<n && (j<n||k<n) )&& (pere->F > fils1->F || (fils2!=NULL && pere->F > fils2->F)) ){
+  while((i<n && (j<n||k<n) )&& ( (fils1 !=NULL &&pere->F > fils1->F) || (fils2!=NULL && pere->F > fils2->F) ) ){
     if (j>n-1){
       return;
     }
@@ -127,6 +128,7 @@ void supprimerElementKTas(T_SOMMET** tas, int* pn, int k){
   tas[k] = tas[n-1];
   tas[n-1] = temp;
   *pn-=1;
-  descendreTas(tas,n-1);
+  n = *pn;
+  descendreTas(tas+k,n-k);
 
 }
