@@ -28,10 +28,10 @@ double H(int sommets, int sommeta, T_SOMMET* graphe){
   xs=(graphe+sommets)->x;
   ys=(graphe+sommets)->y;
   //printf("on a trouve les xa:%lf,ya:%lf,xb:%lf,yb:%lf",xa,ya,xs,ys);
-  double norme=(xa-xs)*(xa-xs)+(ya-ys)*(ya-ys);
+  double diff = fabs(xa-xs) + fabs(ya-ys);
   //printf("%lf\n",norme);
   //printf("%lf\n",sqrt(norme));
-  return(sqrt(norme));
+  return(diff/5);
   //printf("fin H\n");
 }
 
@@ -121,7 +121,7 @@ void affiche_chemin(T_SOMMET* graphe, int depart, int arrivee,int nbsommet){
 int main(){
   //initialisation
   int nbsommet;
-  T_SOMMET* graphe=ouvrir_fichier("graphe2.txt",&nbsommet);
+  T_SOMMET* graphe=ouvrir_fichier("data/grapheColorado.csv",&nbsommet);
   //afficher_graphe( graphe, nbsommet);
   /*int i;
   printf("voici les sommets:\n");

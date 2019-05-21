@@ -65,12 +65,15 @@ void descendreTas (T_SOMMET** tas, int n) {
   if (fils1 == NULL){
     return;
   }
-  while((i<n && (j<n||k<n) )&& (pere->F > fils1->F || pere->F > fils2->F) ){
+ 
+
+
+  while((i<n && (j<n||k<n) )&& (pere->F > fils1->F || (fils2!=NULL && pere->F > fils2->F)) ){
     if (j>n-1){
       return;
     }
     else if (k>n-1){
-      if (fils1 < pere){
+      if (fils1->F < pere->F){
         tas[i] = fils1;
         tas[j] = pere;
         i = 2*(i+1)-1;
