@@ -4,7 +4,12 @@
 void afficheTas(T_SOMMET** tas,int n){
   int i;
   for (i=0;i<n;i++){
-    affiche_sommet(tas[i]);
+    //affiche_sommet(tas[i])
+    printf("nom %s\n",tas[i]->nom);
+  	/*printf("line %s\n",tas[i]->line);
+  	printf("x %lf\n",tas[i]->x);
+  	printf("y %lf\n",tas[i]->y);
+    printf("\n");*/
   }
 }
 
@@ -14,27 +19,34 @@ T_SOMMET** creerTas(int n){
 
 void augmenteTas(T_SOMMET** tas,int* pn){
   int n = *pn;
+  *pn+=1;
   int i = n-1;
+  if(i<=0){
+    return;
+  }
   T_SOMMET* pere = tas[(i-1)/2];
   T_SOMMET* fils = tas[i];
-
+  //printf("point1\n");
   if (pere->F < fils->F){
     return;
   }
+  //printf("point2.5\n");
   do{
     /* printf("pere\n"); */
     /* affiche_sommet(pere); */
     /* printf("fils\n"); */
     /* affiche_sommet(fils); */
     /* printf("%d\n",i); */
+    //printf("point2\n");
     tas[(i-1)/2] = fils;
     tas[i] = pere;
     i = (i-1)/2;
     fils = tas[i];
     pere = tas[(i-1)/2];
+    //printf("point3\n");
   }
   while (i>=0 && (pere->F > fils->F));
-  *pn+=1;
+
 }
 
 
@@ -92,8 +104,8 @@ void supprimeSommetTas(T_SOMMET** tas, int* pn){
   T_SOMMET* temp = tas[0];
   tas[0] = tas [n-1];
   tas[n-1] = temp;
-  descendreTas(tas,n-1);
   *pn -= 1;
+  descendreTas(tas,n-1);
 }
 
 T_SOMMET* popTas(T_SOMMET** tas, int* pn){
@@ -111,6 +123,7 @@ void supprimerElementKTas(T_SOMMET** tas, int* pn, int k){
   int n = *pn;
   tas[k] = tas[n-1];
   tas[n-1] = temp;
-  descendreTas(tas,n-1);
   *pn-=1;
+  descendreTas(tas,n-1);
+
 }

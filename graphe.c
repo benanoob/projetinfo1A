@@ -3,6 +3,8 @@
 #include <string.h>
 #include "graphe.h"
 
+
+
 T_SOMMET* creation_graphe(int nbsommet){
 	return(calloc(nbsommet,sizeof(T_SOMMET)));
 	}
@@ -19,7 +21,7 @@ void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, doubl
 	psommet->ListeFermee=0;
 	psommet->ListeOuverte=0;
 	psommet->voisins=NULL;
-	psommet->F=-1;
+	psommet->F=1000000000;
 	psommet->G= 0;
 	psommet->pere = -1;
 	}
@@ -73,9 +75,9 @@ void creation_arc(int numdepart, int numarrivee, double cout,T_SOMMET* graphe){
 =======*/
 		new->suiv=(graphe+numdepart)->voisins;
 //>>>>>>> 8ac0b33c883a7acb33f129094afaeb469d16d1f8
-		affiche_arc(listsuiv);
+		//affiche_arc(listsuiv);
 		(graphe+numdepart)->voisins=new;
-		affiche_arc(listsuiv);
+		//affiche_arc(listsuiv);
 		}
 	}
 
@@ -111,12 +113,22 @@ T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet){
 	for(psommet=graphe;psommet-graphe<nbsommet;psommet++){
 		/* lecture d�une ligne de description d�un sommet */
 		/* on lit d�abord numero du sommet, la position, le nom de la ligne */
-		fscanf(f,"%d %lf %lf %s", &(numero), &(lat), &(longi), line);
+		fscanf(f,"%d %lf %lf %s *c", &(numero), &(lat), &(longi), line);// *c : ne stocke pas la tabulation mais la supprime
 		/* numero contient alors l�entier ou numero du sommet, lat et longi la position, line le nom de la ligne */
 		/* Le nom de la station peut contenir des separateurs comme l�espace. On utilise plutot fgets dans ce cas */
 		fgets(mot,511,f);
 		if (mot[strlen(mot)-1]<32) {mot[strlen(mot)-1]=0; }/* mot contient le nom du sommet. */
-
+		/*int v;
+		for(v=0;v<32;v++){
+			if(mot[v]!=" "){
+				v=32;
+			}
+		}
+		char mot2[32];
+		int w=0;
+		for (w=0;w<32;w++){
+			mot2[w]=mot2[w+v];
+		}*/
 		creation_sommet( psommet, mot, line, longi, lat);
   }
 

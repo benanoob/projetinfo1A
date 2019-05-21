@@ -21,24 +21,34 @@ int cherche_dans_tas(T_SOMMET** tas,T_SOMMET* graphe,int search,int n_tas,int* p
 
 // evalue H
 double H(int sommets, int sommeta, T_SOMMET* graphe){
+  //printf("debut H\n");
   double xa, xs, ya, ys;
   xa=(graphe+sommeta)->x;
   ya=(graphe+sommeta)->y;
   xs=(graphe+sommets)->x;
   ys=(graphe+sommets)->y;
+  //printf("on a trouve les xa:%lf,ya:%lf,xb:%lf,yb:%lf",xa,ya,xs,ys);
   double norme=(xa-xs)*(xa-xs)+(ya-ys)*(ya-ys);
+  //printf("%lf\n",norme);
+  //printf("%lf\n",sqrt(norme));
   return(sqrt(norme));
+  //printf("fin H\n");
 }
 
 //revoie le cout pour aller d'un sommet à arrivée dans le cas où arrivée est son voisin ou bien -1 si arrivée n'est pas voisin de départ
 double cout(int depart,int arrivee,T_SOMMET* graphe){
+  //printf("debut cout\n");
   L_ARC arc=(graphe+depart)->voisins;
+  //printf("fin prem\n");
   while(arc!=NULL){
     if((arc->val).arrivee==arrivee){
+      printf("cout: %lf\n",(arc->val).cout);
       return((arc->val).cout);
     }
+    arc=arc->suiv;
   }
-  return(-1);
+  //printf("fincout2\n");
+  return(1000000000);
 }
 
 
@@ -61,35 +71,81 @@ int trouver_sommet(char* depart,T_SOMMET* graphe,int nbsommet){
     }
     a+=1;
   }
+  //printf("pas trouve");
 return(nbsommet+1);}
 
-
-void affiche_chemin(T_SOMMET* graphe, int depart, int arrivee){
-	double cout=0;
-	while(depart!=arrivee){
-		printf("on passe par %s \n",(graphe+depart)->nom);
-    cout+=(graphe->voisins->val).cout;
-    depart=(graphe+depart)->pere;
-	}
-  printf("on arrive à %s \n avec un cout de %lf\n",(graphe+depart)->nom,cout);
-	}
-
-
-int main(){
-  //initialisation
-  int nbsommet;
-  T_SOMMET* graphe=ouvrir_fichier("graphe1.txt",&nbsommet);
-
-  printf("Quel est votre point de depart\n");
+/*void initialiser_arrivee_depart_recherche_simple(){
+  printf("\nQuel est votre point de depart\n");
   char depart[20];
   scanf("%s",depart);
+  //printf("%s%d",depart,1);
+  //printf("%s",(graphe+1)->nom);
   int d=trouver_sommet(depart,graphe,nbsommet);
+  if(d>nbsommet){
+    printf("%d\n",d-nbsommet);
+    return(0);
+  }
 
   printf("Quel est votre point d'arrivee\n");
   char arrivee[20];
   scanf("%s",arrivee);
   int a=trouver_sommet(arrivee,graphe,nbsommet);
+  if(a>nbsommet){
+    return(0);
+  }
+}
+*/
 
+void affiche_chemin(T_SOMMET* graphe, int depart, int arrivee,int nbsommet){
+  int sommet[nbsommet];
+  int isommet=0;
+  do{
+    //printf("on passe par %d \n",arrivee /*(graphe+depart)->nom*/);
+    printf("arrivee = %d \n", arrivee);
+    sommet[isommet]=arrivee;
+    arrivee=(graphe+arrivee)->pere;
+    isommet+=1;
+    //affiche_sommet(graphe+arrivee);
+  }
+	while(depart!=arrivee && arrivee>=0 );
+  printf("Chemin à emprunter:\n");
+  //printf("isommet = %d",isommet);
+  int i;
+  for(i=isommet-1;i>=0;i--){
+    printf("i = %d\n",sommet[i]);
+    //printf("%s -> ",(graphe+sommet[i])->nom );
+  }
+  printf("\non arrive à %d \n avec un cout de %lf\n",sommet[0]/*(graphe+arrivee)->nom*/,(graphe+sommet[0])->G);
+	}
+
+int main(){
+  //initialisation
+  int nbsommet;
+  T_SOMMET* graphe=ouvrir_fichier("graphe2.txt",&nbsommet);
+  //afficher_graphe( graphe, nbsommet);
+  /*int i;
+  printf("voici les sommets:\n");
+  for(i=0;i<nbsommet;i++){
+    printf("%s ",(graphe+i)->nom);
+  }
+  */
+
+  printf("\nQuel est votre point de depart\n");
+  int d;
+  scanf("%d",&d);
+  if(d>nbsommet){
+    printf("%d\n",d-nbsommet);
+    return(0);
+  }
+
+  printf("Quel est votre point d'arrivee\n");
+  int a;
+  scanf("%d",&a);
+  if(a>nbsommet){
+    return(0);
+  }
+  //int d=3;
+  //int a=7;
   // debut boucle initialisation F
 
 
@@ -105,69 +161,80 @@ int main(){
     T_SOMMET** tas=creerTas(nbsommet);
     int n_tas=0;
     *tas=graphe+d;// ajouter depart au tas
-
-    int k=d;
-    (graphe+k)->F=H(k,a,graphe);
+     n_tas=1;
+    int k=d; //init k (sommet en cours) au depart
+    (graphe+k)->F=H(k,a,graphe); // F = heuristique car G =0
     (graphe+k)->G=0;
+
     //algorithme iteratif
     while(k!=a && n_tas!=0){
+      //printf("debut grand while\n");
+      //afficheTas(tas,n_tas);
       //augmenteTas(tas,n_tas);// on remet le tas en forme de tas
-      T_SOMMET* stockage =popTas(tas,&n_tas);//premier element du tas: le meilleur chemin
+      T_SOMMET* stockage =tas[0];//premier element du tas: le meilleur chemin
       k=stockage-graphe;//on cherche sa position dans le graphe plus commode à manipuler
-      if (k!=a){//on est pas arrivé
-        (graphe+k)->ListeFermee=1;
-        //virer k de LO deja fait et ??? enonce
+      if(k>nbsommet){
+        printf("probleme k\n"); //recherche une erreur majeure
+        return(1);
+      }
+      if (k!=a){//tant qu'on est pas arrivé
+        (graphe+k)->ListeFermee=1; //ajout k a la LF
+        supprimeSommetTas(tas, &n_tas); // supprime k de la LO
+        printf("k: %d",k);
         L_ARC arc=(graphe+k)->voisins; // liste des voisins
         while(arc!=NULL){
+          //printf("debut while\n");
+          //affiche_sommet(graphe+k);
           int s=(arc->val).arrivee;//on considère le sommet d'arrivee s
+          //printf("s:%d, suiv:%d\n",s,arc->suiv->val.arrivee);
           if ((graphe+s)->ListeFermee==0){
             //int posdanstas=0;
 
             if((graphe+s)->ListeOuverte ==0){//pas dans liste ouverte
+              //printf("pasdanslisteouverte\n");
               (graphe+s)->pere=k;
+              //printf("bon_pour_pere\n");
               (graphe+s)->G=(graphe+k)->G+cout(k,s,graphe);
+              //printf("miseajourG\n");
               (graphe+s)->F=(graphe+s)->G+H(s,a,graphe);
+              //printf("miseajourF\n");
               *(tas+n_tas)=graphe+s;
+              //printf("augmentetas,n_tas: %d\n",n_tas);
               augmenteTas(tas,&n_tas);
-              /*T_SOMMET* stock=*(tas+(k+1)/2);
-              *(tas+(k+1)/2)=graphe+s;
-              *(tas+posdanstas)=stock;//Pere(s)←k
-              (graphe+k)->F=((graphe+k)->F)-H(k, a, graphe)+ cout(k,s,graphe)+ H(s,a,graphe);
-              stock=*(tas+n_tas+1);
-              *(tas+n_tas+1)=*(tas+posdanstas);
-              *(tas+posdanstas)=stock;//on a inséré le nouveau sommet dans le tas
-		n_tas=max(n_tas,posdanstas);
-		n_tas=n_tas+1;
-              augmentetas(tas,n_tas);*/
+              (graphe+s)->ListeOuverte=1;
+              //n_tas+=1;
+              //printf("fincasLO, n_tas: %d \n",n_tas);
             }
 
             else{
-              if((graphe+k)->G+cout(k,s,graphe)<(graphe+s)->G){
+              //printf("sinon\n");
+              //printf("onvafaireif\n");
+              if(((graphe+k)->G+cout(k,s,graphe)) <(graphe+s)->G)//s'il existe un meilleur chemin
+              {
+                //printf("il y a un meilleur chemin\n");
                 (graphe+s)->pere=k;
                 (graphe+s)->G=(graphe+k)->G+cout(k,s,graphe);
-    //            supprimerElementKTas(tas,&n_tas,s);//fct benano
+                supprimerElementKTas(tas,&n_tas,s);//fct benano
                 (graphe+s)->F=(graphe+s)->G+H(s,a,graphe);
                 *(tas+n_tas)=graphe+s;
                 augmenteTas(tas,&n_tas);
+                //printf("fin cas meilleur chemin\n");
               }
-              /*
-              if(((graphe+k)->F)-H(k,a,graphe)+cout(k,s,graphe)<((graphe+s)->F)-H(s,a,graphe)){
-                T_SOMMET* stock=*(tas+(k+1)/2);
-                *(tas+(k+1)/2)=graphe+s;
-                *(tas+posdanstas)=stock;//Pere(s)←k
-		supprimeSommetTas(tas,posdanstas);
-		(*(tas+posdanstas))->F;
-
-              	(graphe+k)->F=((graphe+k)->F)-H(k, a, graphe)+ cout(k,s,graphe)+ H(s,a,graphe);
-		n_tas=n_tas+1;
-		augmenteTas(tas,n_tas);
-*/
               }
             }
-          }
-          arc=arc->suiv;
-        }
-      }
-      affiche_chemin(graphe,d,a);
-      return(NULL);
+            arc=arc->suiv;
+          }//fin parcours voisin
+
+        }//fin si k !=a
+      }//fin while principal
+
+
+      //afficheTas(tas,n_tas);
+      printf("\n%d,%d\n",d,a);
+      //printf("%s\n"(*tas)->nom);
+      //printf("%s\n"(*tas)->);
+      affiche_chemin(graphe,d,a,nbsommet);
+      suppression_graphe(graphe,nbsommet);
+      libereTas(tas);
+      return(1);
 }
