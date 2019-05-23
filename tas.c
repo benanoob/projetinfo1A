@@ -129,6 +129,9 @@ void supprimerElementKTas(T_SOMMET** tas, int* pn, int k){
   tas[n-1] = temp;
   *pn-=1;
   n = *pn;
-  descendreTas(tas+k,n-k);
+  int i = k;
+  augmenteTas(tas,&i);
+  //descendreTas(tas+k,n-k);// il ne faut pas descendre mais faire remonter le nouvel elt puisque son G est meilleur que l'ancien
+
 
 }
