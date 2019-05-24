@@ -172,7 +172,7 @@ int main(){
       //printf("debut grand while\n");
       //afficheTas(tas,n_tas);
       //augmenteTas(tas,n_tas);// on remet le tas en forme de tas
-      T_SOMMET* stockage =tas[0];//premier element du tas: le meilleur chemin
+T_SOMMET* stockage =tas[0];//premier element du tas: le meilleur chemin
       k=stockage-graphe;//on cherche sa position dans le graphe plus commode à manipuler
       if(k>nbsommet){
         printf("probleme k\n"); //recherche une erreur majeure
@@ -206,10 +206,10 @@ int main(){
               (graphe+s)->ListeOuverte=augmenteTas(tas,&n_tas); // on stock la postition dans le tas pour ne pas la chercher si on a besoin de supprimer cet elt du tas plus tard
               //printf("fincasLO, n_tas: %d \n",n_tas);
 
-              printf("le sommet k est en pos %d dans le tas\n",(graphe+s)->ListeOuverte);
-              affiche_sommet(graphe+s);
-              printf("\n #####");
-              afficheTas(tas,n_tas);
+              //printf("le sommet k est en pos %d dans le tas\n",(graphe+s)->ListeOuverte);
+              //affiche_sommet(graphe+s);
+              //printf("\n #####");
+              //afficheTas(tas,n_tas);
 
               }
 
@@ -222,10 +222,10 @@ int main(){
                 (graphe+s)->pere=k;
                 (graphe+s)->G=(graphe+k)->G+cout(k,s,graphe);
 
-                printf("le sommet k est en pos %d dans le tas\n",(graphe+s)->ListeOuverte);
-                affiche_sommet(graphe+s);
-                printf("\n #####");
-                afficheTas(tas,n_tas);
+                //printf("le sommet k est en pos %d dans le tas\n",(graphe+s)->ListeOuverte);
+                //affiche_sommet(graphe+s);
+                //printf("\n #####");
+                //afficheTas(tas,n_tas);
 
                 supprimerElementYTas(tas,&n_tas,(graphe+s)->ListeOuverte);//fct qui marche pas mdr, benano
                 (graphe+s)->F=(graphe+s)->G+H(s,a,graphe);
