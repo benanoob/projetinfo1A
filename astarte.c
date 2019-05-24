@@ -227,7 +227,7 @@ int main(){
                 printf("\n #####");
                 afficheTas(tas,n_tas);
 
-                supprimerElementKTas(tas,&n_tas,(graphe+s)->ListeOuverte);//fct benano
+                supprimerElementKTas(tas,&n_tas,(graphe+s)->ListeOuverte);//fct qui marche pas mdr, benano
                 (graphe+s)->F=(graphe+s)->G+H(s,a,graphe);
                 *(tas+n_tas)=graphe+s;
                 augmenteTas(tas,&n_tas);

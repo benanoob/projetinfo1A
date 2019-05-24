@@ -9,19 +9,19 @@ int main(){
 
   //creation tas de test
 
-  tas[0] = & graphe[0];
+  tas[0] = & graphe[0]; //A
   tas[0]->F = 0;
 
-  tas[1] = & graphe[1];
+  tas[1] = & graphe[1];//B
   tas[1]->F = 1;
 
-  tas[2] = & graphe[2];
+  tas[2] = & graphe[2]; //C
   tas[2]->F = 2;
 
-  tas[3] = & graphe[3];
+  tas[3] = & graphe[3];//D
   tas[3]->F = 3;
 
-  tas[4] = & graphe[4];
+  tas[4] = & graphe[4]; //E
   tas[4]->F = 4;
 
 
@@ -52,9 +52,11 @@ int main(){
   /* afficheTas(tas,5); */
 
   int n_tas = 5;
-  printf("on supprime l'elt spécifié puis on desend le tas restant");
-  supprimerElementKTas(tas,&n_tas,1);
-  afficheTas(tas,n_tas-1);
+  printf("on supprime l'elt spécifié puis on desend le tas restant\n");
+  supprimerElementKTas(tas,&n_tas,2);
+
+  printf("tas final \n");
+  afficheTas(tas,n_tas);
 
 
 
