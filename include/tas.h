@@ -19,5 +19,5 @@ T_SOMMET* popTas(T_SOMMET** tas, int* pn);
 
 void supprimeSommetTas(T_SOMMET** tas, int* pn);
 
-void supprimerElementKTas(T_SOMMET** tas, int* pn, int k);
+void supprimerElementYTas(T_SOMMET** tas, int* pn, int y);
 #endif

@@ -126,13 +126,64 @@ void libereTas(T_SOMMET** tas){
   free(tas);
 }
 
-void supprimerElementKTas(T_SOMMET** tas, int* pn, int k){
-  T_SOMMET* temp = tas[k];
+void supprimerElementYTas(T_SOMMET** tas, int* pn, int y){
+  T_SOMMET* temp = tas[y];
   int n = *pn;
-  tas[k] = tas[n-1];
+  tas[y] = tas[n-1];
   tas[n-1] = temp;
   *pn-=1;
-  printf("n = %d, k = %d \n",n,k);
+  n = *pn;
+  //printf("n = %d, k = %d \n",n,k);
   //descendreTas(tas+k,n-k-1); surtout pas, cela ne respecte pas la structure de tas
-   
+  int i = y;
+  int j = 2*(i+1) -1;
+  int k = 2*(i+1);
+  //bordel
+  T_SOMMET* fils1 = tas[j];
+  T_SOMMET* fils2 = tas[k];
+  T_SOMMET* pere = tas[i];
+  if (pere == NULL){
+    return;
+  }
+  if (fils1 == NULL){
+    return;
+  }
+ 
+  while((i<n && (j<n||k<n) )&& ( (fils1 !=NULL &&pere->F > fils1->F) || (fils2!=NULL && pere->F > fils2->F) ) ){
+    printf("le tas, i = %d \n",i);
+    afficheTas(tas,n);
+    printf("i= %d ; j = %d ; k = %d \n",i,j,k);
+    if (j>n-1){
+      return;
+    }
+    else if (k>n-1){
+      if (fils1->F < pere->F){
+        printf("echange fils 1 et pere, il n'y a qu'un fils\n");
+        tas[i] = fils1;
+        tas[j] = pere;
+        i = 2*(i+1)-1;
+      }
+      else{
+        return;
+      }
+    }
+    else if (fils1<fils2){
+      printf("echange fils 1 et pere, il existe 2 fils\n");
+      tas [i] = fils1;
+      tas[j] = pere;
+      i = 2*(i+1)-1;
+    }
+    else{
+      printf("echange fils 2 et pere, il y a 2 fils\n");
+      tas[i] = fils2;
+      tas[k] = pere;
+      i = 2*(i+1);
+    }
+    j = 2*(i+1)-1;
+    k = 2*(i+1);
+    fils1 = tas[j];
+    fils2 = tas[k];
+    pere = tas[i];
+
+  } 
 }

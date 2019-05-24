@@ -53,7 +53,7 @@ int main(){
 
   int n_tas = 5;
   printf("on supprime l'elt spécifié puis on desend le tas restant\n");
-  supprimerElementKTas(tas,&n_tas,2);
+  supprimerElementYTas(tas,&n_tas,3);
 
   printf("tas final \n");
   afficheTas(tas,n_tas);
