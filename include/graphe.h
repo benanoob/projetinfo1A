@@ -16,7 +16,7 @@ void afficher_graphe(T_SOMMET* graphe,int nbsommet);
 
 void creation_arc(int numdepart, int numarrivee, double cout,T_SOMMET* graphe);
 
-T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet);
+T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet,int metro);
 
 void suppression_arc(L_ARC arc);
 

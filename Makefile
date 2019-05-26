@@ -9,6 +9,12 @@ astarte : astarte.o graphe.o tas.o
 testtas : graphe.o testtas.o tas.o
 	$(CC) graphe.o testtas.o tas.o  -o testtas $(LFLAGS)
 
+hachage : graphe.o hachage.o
+	$(CC) graphe.o hachage.o  -o hachage $(LFLAGS)
+	
+hachage.o : hachage.c
+	$(CC) hachage.c -c $(CFLAGS)
+
 astarte.o : astarte.c
 	$(CC) astarte.c -c $(CFLAGS)
 
@@ -22,4 +28,4 @@ graphe.o: graphe.c
 	$(CC) graphe.c -c $(CFLAGS)
 
 clean :
-	rm -f *.o testtas astarte 
+	rm -f *.o testtas astarte hachage
