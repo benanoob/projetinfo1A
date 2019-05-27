@@ -121,7 +121,7 @@ void affiche_chemin(T_SOMMET* graphe, int depart, int arrivee,int nbsommet){
 int main(){
   //initialisation
   int nbsommet;
-  T_SOMMET* graphe=ouvrir_fichier("data/grapheNewYork.csv",&nbsommet);
+  T_SOMMET* graphe=ouvrir_fichier("data/grapheNewYork.csv",&nbsommet,0);
   //afficher_graphe( graphe, nbsommet);
   /*int i;
   printf("voici les sommets:\n");
