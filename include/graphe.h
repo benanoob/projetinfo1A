@@ -22,4 +22,12 @@ void suppression_arc(L_ARC arc);
 
 void suppression_graphe(T_SOMMET* graphe,int nbsommet);
 
+double cout(int depart,int arrivee,T_SOMMET* graphe);
+
+double H(int sommets, int sommeta, T_SOMMET* graphe);
+
+int trouver_sommet(char* depart,T_SOMMET* graphe,int nbsommet);
+
+void affiche_chemin(T_SOMMET* graphe, int depart, int arrivee,int nbsommet);
 #endif 
+

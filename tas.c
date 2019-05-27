@@ -19,7 +19,7 @@ T_SOMMET** creerTas(int n){
   return(calloc(n,sizeof(T_SOMMET*)));
 }
 
-int augmenteTas(T_SOMMET** tas,int* pn){ //retourne la position de l'elt dans le tas 
+void augmenteTas(T_SOMMET** tas,int* pn){ //retourne la position de l'elt dans le tas 
   int n = *pn;
   *pn+=1;
   int i = n; //attention ici erreure corrigée, l'elt a monter est placé en [n] et pas [n-1]dernier element avant augmentation
@@ -27,7 +27,7 @@ int augmenteTas(T_SOMMET** tas,int* pn){ //retourne la position de l'elt dans le
   T_SOMMET* fils = tas[i];
   //printf("point1\n");
   if (pere->F < fils->F){
-    return(i);
+    return;
   }
   //printf("point2.5\n");
   do{
@@ -45,8 +45,6 @@ int augmenteTas(T_SOMMET** tas,int* pn){ //retourne la position de l'elt dans le
     //printf("point3\n");
   }
   while (i>=0 && (pere->F > fils->F));
-
-  return(i);
 
 }
 
@@ -186,4 +184,13 @@ void supprimerElementYTas(T_SOMMET** tas, int* pn, int y){
     pere = tas[i];
 
   } 
+}
+
+int chercheDansTas(T_SOMMET** tas,int n_tas,T_SOMMET* graphe,int sommetCherche){
+  int i;
+  for (i=0;i<n_tas;i++){
+    if(tas[i]==&(graphe[sommetCherche])){
+      return(i);
+    }
+  }
 }

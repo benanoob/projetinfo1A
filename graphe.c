@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "graphe.h"
-
+#include <math.h>
 
 
 T_SOMMET* creation_graphe(int nbsommet){
@@ -19,7 +19,7 @@ void creation_sommet(T_SOMMET* psommet,char* nom,char* line, double longi, doubl
 	psommet->x=longi;
 	psommet->y=lat;
 	psommet->ListeFermee=0;
-	psommet->ListeOuverte=-1;
+	psommet->ListeOuverte=0;
 	psommet->voisins=NULL;
 	psommet->F=1000000000;
 	psommet->G= 0;
@@ -44,9 +44,7 @@ void affiche_sommet(T_SOMMET* psommet){
 	printf("x %lf\n",psommet->x);
 	printf("y %lf\n",psommet->y);
 	printf("ListeFermee %d\n",psommet->ListeFermee);
-	printf("ListeFermee %d\n",psommet->ListeOuverte);
-	printf("F %lf\n",psommet->F);
-	printf("G %lf\n",psommet->G);
+	printf("ListeOuverte %d\n",psommet->ListeOuverte);
 	printf("rang du pere %d\n",psommet->pere);
 	affiche_arc(psommet->voisins);
 	printf("\n");
@@ -77,7 +75,7 @@ void creation_arc(int numdepart, int numarrivee, double cout,T_SOMMET* graphe){
 	}
 
 
-T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet){
+T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet,int metro){
 	FILE* f;
 	int numero,nbsommet,nbarc;
 	double lat,longi ;
@@ -138,6 +136,14 @@ T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet){
 		//lecture de: un entier : num�ro du sommet de d�part 2. un entier : num�ro du sommet d�arriv�e 3. un r�el : valeur ou co�t de l�arc
 		fscanf(f,"%d %d %lf", &(numdepart), &(numarrivee), &(cout));
 
+        if (metro){
+            if (cout == 360.){
+                cout = 10; //cout arbitraire pour les correspondances
+}
+            if ( cout == 600){
+                cout = 20;
+}
+}
 		creation_arc(numdepart,numarrivee,cout,graphe);
 		}
 
@@ -171,3 +177,70 @@ int rechercher_dans_arc(L_ARC arc,int numsommet){
 	}
 	return(0);
 }
+// evalue H
+double H(int sommets, int sommeta, T_SOMMET* graphe){
+  //printf("debut H\n");
+  double xa, xs, ya, ys;
+  xa=(graphe+sommeta)->x;
+  ya=(graphe+sommeta)->y;
+  xs=(graphe+sommets)->x;
+  ys=(graphe+sommets)->y;
+  //printf("on a trouve les xa:%lf,ya:%lf,xb:%lf,yb:%lf",xa,ya,xs,ys);
+  double diff = fabs(xa-xs) + fabs(ya-ys);
+  //printf("%lf\n",norme);
+  //printf("%lf\n",sqrt(norme));
+  return(diff/5); //par 4 meilleur ?
+  //printf("fin H\n");
+}
+
+//revoie le cout pour aller d'un sommet à arrivée dans le cas où arrivée est son voisin ou bien -1 si arrivée n'est pas voisin de départ
+double cout(int depart,int arrivee,T_SOMMET* graphe){
+  //printf("debut cout\n");
+  L_ARC arc=(graphe+depart)->voisins;
+  //printf("fin prem\n");
+  while(arc!=NULL){
+    if((arc->val).arrivee==arrivee){
+      //printf("cout: %lf\n",(arc->val).cout);
+      return((arc->val).cout);
+    }
+    arc=arc->suiv;
+  }
+  //printf("fincout2\n");
+  return(1000000000);
+}
+
+
+//cherche un sommet dans le graphe par son nom et en retourne le numero
+
+int trouver_sommet(char* depart,T_SOMMET* graphe,int nbsommet){
+  int a=0;
+  while(a<nbsommet){
+    if(strcmp(depart,(graphe+a)->nom)==0){
+      return(a);
+    }
+    a+=1;
+  }
+return(nbsommet+1);}
+
+void affiche_chemin(T_SOMMET* graphe, int depart, int arrivee,int nbsommet){
+  int sommet[nbsommet];
+  int isommet=0;
+  do{
+    //printf("on passe par %d \n",arrivee /*(graphe+depart)->nom*/);
+    printf("arrivee = %d \n", arrivee);
+    sommet[isommet]=arrivee;
+    arrivee=(graphe+arrivee)->pere;
+    isommet+=1;
+    //affiche_sommet(graphe+arrivee);
+  }
+	while(depart!=arrivee && arrivee>=0 );
+  printf("Chemin à emprunter:\n");
+  //printf("isommet = %d",isommet);
+  int i;
+  for(i=isommet-1;i>=0;i--){
+    printf("i = %d\n",sommet[i]);
+    //printf("%s -> ",(graphe+sommet[i])->nom );
+  }
+  printf("\non arrive à %d \n avec un cout de %lf\n",sommet[0]/*(graphe+arrivee)->nom*/,(graphe+sommet[0])->G);
+	}
+
