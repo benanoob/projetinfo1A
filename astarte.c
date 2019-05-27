@@ -4,6 +4,11 @@
 #include <string.h>
 #include "tas.h"
 #include "graphe.h"
+#include "hachage.h"
+
+//editer repertoire de données ici
+char repertoire[512] = "data/graphe2.txt";
+
 
 
 
@@ -31,7 +36,7 @@
 int main(){
   //initialisation
   int nbsommet;
-  T_SOMMET* graphe=ouvrir_fichier("data/graphe2.txt",&nbsommet,0);
+  T_SOMMET* graphe=ouvrir_fichier(repertoire,&nbsommet,0);
   //afficher_graphe( graphe, nbsommet);
   /*int i;
   printf("voici les sommets:\n");
@@ -39,6 +44,9 @@ int main(){
     printf("%s ",(graphe+i)->nom);
   }
   */
+  int tailleTable = 500;
+  table* table = creation_table(graphe,tailleTable,nbsommet);
+  afficher_table(tailleTable,table,graphe);
 
   printf("\nQuel est votre point de depart\n");
   int d;

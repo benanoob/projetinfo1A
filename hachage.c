@@ -4,6 +4,7 @@
 #include "hachage.h"
 #include "graphe.h"
 #include "type.h"
+
 unsigned int calcul_hachage(char* c,int taille_table){
   int i=strlen(c);
   //printf("\ni:%d\n",i);
@@ -114,7 +115,8 @@ void liberer_table_hachage(table* table_hach,int taille_table){
   free(table_hach);
 }
 
-int main(){
+/* debug
+ int main(){
   int nbsommet;
   int i;
   int taille_table=31;
@@ -131,4 +133,4 @@ int main(){
     printf("%s: en position %d\n",nom,psommet-graphe);
     }
     liberer_table_hachage(table_hach,taille_table);
-}
+}*/

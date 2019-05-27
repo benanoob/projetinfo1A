@@ -3,8 +3,8 @@ CFLAGS = -Wall -Wextra -g -I include
 LFLAGS = -lm
 
 
-astarte : astarte.o graphe.o tas.o
-	$(CC) astarte.o graphe.o tas.o -o astarte $(LFLAGS)
+astarte : astarte.o graphe.o tas.o hachage.o
+	$(CC) astarte.o graphe.o tas.o hachage.o -o astarte $(LFLAGS)
 
 testtas : graphe.o testtas.o tas.o
 	$(CC) graphe.o testtas.o tas.o  -o testtas $(LFLAGS)
