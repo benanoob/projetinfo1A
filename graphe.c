@@ -110,7 +110,7 @@ T_SOMMET* ouvrir_fichier(char* nomfichier,int* pnbsommet,int metro){
 		/* numero contient alors l�entier ou numero du sommet, lat et longi la position, line le nom de la ligne */
 		/* Le nom de la station peut contenir des separateurs comme l�espace. On utilise plutot fgets dans ce cas */
 		fgets(mot,511,f);
-		if (mot[strlen(mot)-1]<32) {mot[strlen(mot)-1]=0; }/* mot contient le nom du sommet. */
+		while (mot[strlen(mot)-1]<32) {mot[strlen(mot)-1]=0; }/* mot contient le nom du sommet. */
 		/*int v;
 		for(v=0;v<32;v++){
 			if(mot[v]!=" "){
@@ -238,7 +238,7 @@ void affiche_chemin(T_SOMMET* graphe, int depart, int arrivee,int nbsommet){
   //printf("isommet = %d",isommet);
   int i;
   for(i=isommet-1;i>=0;i--){
-    printf("i = %d\n",sommet[i]);
+    printf("i = %s\n",graphe[sommet[i]].nom);
     //printf("%s -> ",(graphe+sommet[i])->nom );
   }
   printf("\non arrive à %d \n avec un cout de %lf\n",sommet[0]/*(graphe+arrivee)->nom*/,(graphe+sommet[0])->G);

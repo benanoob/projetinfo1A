@@ -3,7 +3,7 @@ Sujet du projet : http://tdinfo.phelma.grenoble-inp.fr/
 
 
 Comment utiliser le programme:
-
+_make
 _lancer astarte
 _spécifier les sommets de départ et d'arrivée
 _le programme afficher le chemin et le cout total

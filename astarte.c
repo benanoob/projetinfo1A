@@ -7,10 +7,7 @@
 #include "hachage.h"
 
 //editer repertoire de données ici
-char repertoire[512] = "data/graphe2.txt";
-
-
-
+char repertoire[512] = "/users/prog1a/C/librairie/projetS22019/grapheNewYork.csv";
 
 /*void initialiser_arrivee_depart_recherche_simple(){
   printf("\nQuel est votre point de depart\n");
@@ -44,11 +41,49 @@ int main(){
     printf("%s ",(graphe+i)->nom);
   }
   */
-  int tailleTable = 500;
+  int tailleTable = 30;
   table* table = creation_table(graphe,tailleTable,nbsommet);
-  afficher_table(tailleTable,table,graphe);
+  //afficher_table(tailleTable,table);
 
   printf("\nQuel est votre point de depart\n");
+  int d;
+  char s[25];
+  //scanf("%s",s);
+  fgets(s,31,stdin);
+	s[strlen(s)-1]='\0';// correction du dernier caractère à la saisie
+/*
+int g;
+for(g=0;g<strlen(s)-1;g++){
+	printf("%c\n",s[g]);}
+*/
+  int fin = strlen(s);
+  //printf ("la fin est en :%d",fin);
+  s[fin] = '\0';
+  //printf("avec le zero de ses morts %s",s);
+  //printf("la chaine entrée est %s%d\n  et son hach est %d\n",s,strlen(s),calcul_hachage(s,tailleTable));
+  T_SOMMET* psommet = chercher_dans_table(table,tailleTable,s);
+  d = psommet - graphe ;
+  //printf("d vaut %d\n",d);
+  if(d>nbsommet){
+    //printf("%d\n",d-nbsommet);
+    return(0);
+  }
+
+  printf("Quel est votre point d'arrivee\n");
+  int a;
+  //scanf("%s",s);
+  fgets(s,31,stdin);
+   s[strlen(s)-1]='\0';// correction du dernier caractère à la saisie
+
+  psommet = chercher_dans_table(table,tailleTable,s);
+  a = psommet - graphe;
+  //printf("d vaut %d\n",a);
+  if(a>nbsommet){
+    return(0);
+  }
+
+
+  /*printf("\nQuel est votre point de depart\n");
   int d;
   scanf("%d",&d);
   if(d>nbsommet){
@@ -62,8 +97,11 @@ int main(){
   if(a>nbsommet){
     return(0);
   }
+*/
 
-    //initialisation tas
+  /*
+    printf("initialisation tas");
+printf("initialisation tas");*/
     T_SOMMET** tas=creerTas(nbsommet);
     int n_tas=0;
     *tas=graphe+d;// ajouter depart au tas
@@ -107,7 +145,7 @@ T_SOMMET* stockage =tas[0];//premier element du tas: le meilleur chemin
               //printf("miseajourG\n");
               (graphe+s)->F=(graphe+s)->G+H(s,a,graphe);
               //printf("miseajourF\n");
-              *(tas+n_tas)=graphe+s;
+              *(tas+n_tas)=graphe+s;//on a mis le nouveau sommet après la fin du graphe
               //printf("augmentetas,n_tas: %d\n",n_tas);
               (graphe+s)->ListeOuverte = 1;
                augmenteTas(tas,&n_tas); // on stock la postition dans le tas pour ne pas la chercher si on a besoin de supprimer cet elt du tas plus tard
@@ -125,7 +163,7 @@ T_SOMMET* stockage =tas[0];//premier element du tas: le meilleur chemin
               //printf("onvafaireif\n");
               if(((graphe+k)->G+cout(k,s,graphe)) <(graphe+s)->G)//s'il existe un meilleur chemin
               {
-                //printf("il y a un meilleur chemin\n");
+               // printf("il y a un meilleur chemin\n");
                 (graphe+s)->pere=k;
                 (graphe+s)->G=(graphe+k)->G+cout(k,s,graphe);
 
@@ -134,12 +172,11 @@ T_SOMMET* stockage =tas[0];//premier element du tas: le meilleur chemin
                 //printf("\n #####");
                 //afficheTas(tas,n_tas);
                 int positionTas = chercheDansTas(tas,n_tas,graphe,k); 
-                printf("position dans le tas a delete est %d \n ",positionTas);
-                supprimerElementYTas(tas,&n_tas,positionTas);//fct qui marche pas mdr, benano
+                //printf("position dans le tas a delete est %d \n ",positionTas);
+                supprimerElementYTas(tas,&n_tas,positionTas);
                 (graphe+s)->F=(graphe+s)->G+H(s,a,graphe);
                 *(tas+n_tas)=graphe+s;
                 augmenteTas(tas,&n_tas);
-                //printf("fin cas meilleur chemin\n");
               }
               }
             }
@@ -151,11 +188,11 @@ T_SOMMET* stockage =tas[0];//premier element du tas: le meilleur chemin
 
 
       //afficheTas(tas,n_tas);
-      printf("\n%d,%d\n",d,a);
+      //printf("\n%d,%d\n",d,a);
       //printf("%s\n"(*tas)->nom);
       //printf("%s\n"(*tas)->);
       affiche_chemin(graphe,d,a,nbsommet);
       suppression_graphe(graphe,nbsommet);
       libereTas(tas);
       return(1);
-}
+} 

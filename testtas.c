@@ -2,13 +2,19 @@
 #include "graphe.h"
 int main(){
   int nbSommet = 0;
-  T_SOMMET** tas = creerTas(15);
-  T_SOMMET* graphe = ouvrir_fichier ("data/graphe1.txt",&nbSommet);
+  T_SOMMET** tas = creerTas(14);
+  T_SOMMET* graphe = ouvrir_fichier ("data/graphe2.txt",&nbSommet,0);
   printf("il y a %d sommets \n", nbSommet);
   //afficher_graphe(graphe,nbSommet);
 
   //creation tas de test
+int i=0;
 
+for(i=0;i<15;i++){
+	tas[i] = & graphe[i]; //A
+  	tas[i]->F = i;	
+	}
+/*
   tas[0] = & graphe[0]; //A
   tas[0]->F = 0;
 
@@ -23,10 +29,10 @@ int main(){
 
   tas[4] = & graphe[4]; //E
   tas[4]->F = 4;
-
+*/
 
   printf(" \n \n tas original\n");
-  afficheTas(tas,5);
+  afficheTas(tas,14);
 
 
   // printf("\n \n tas augmenté \n"); 
@@ -50,10 +56,12 @@ int main(){
 
   /* printf("et le tas \n"); */
   /* afficheTas(tas,5); */
-
-  int n_tas = 5;
+  
+  int n_tas = 14;
   printf("on supprime l'elt spécifié puis on desend le tas restant\n");
-  supprimerElementYTas(tas,&n_tas,3);
+  supprimeSommetTas(tas,&n_tas);
+  //supprimerElementYTas(tas,&n_tas,3);
+  //augmenteTas(tas,&n_tas);
 
   printf("tas final \n");
   afficheTas(tas,n_tas);

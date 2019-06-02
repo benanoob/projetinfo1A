@@ -26,11 +26,12 @@ void augmenteTas(T_SOMMET** tas,int* pn){ //retourne la position de l'elt dans l
   T_SOMMET* pere = tas[(i-1)/2];
   T_SOMMET* fils = tas[i];
   //printf("point1\n");
-  if (pere->F < fils->F){
-    return;
-  }
+  do{  //deplace depuis ligne 34
+    if (pere->F < fils->F){
+       return;
+	  }
   //printf("point2.5\n");
-  do{
+  
     /* printf("pere\n"); */
     /* affiche_sommet(pere); */
     /* printf("fils\n"); */
@@ -49,7 +50,6 @@ void augmenteTas(T_SOMMET** tas,int* pn){ //retourne la position de l'elt dans l
 }
 
 
-
 void descendreTas (T_SOMMET** tas, int n) {
   int i = 0;
   int j = 2*(i+1) -1;
@@ -65,7 +65,7 @@ void descendreTas (T_SOMMET** tas, int n) {
     return;
   }
  
-  while((i<n && (j<n||k<n) )&& ( (fils1 !=NULL &&pere->F > fils1->F) || (fils2!=NULL && pere->F > fils2->F) ) ){
+  while((i<n && (j<n||k<n) ) ){
     //printf("le tas, i = %d \n",i);
     //afficheTas(tas,n);
     //printf("i= %d ; j = %d ; k = %d \n",i,j,k);
@@ -83,7 +83,8 @@ void descendreTas (T_SOMMET** tas, int n) {
         return;
       }
     }
-    else if (fils1<fils2){
+    else if ( pere >fils1 || pere > fils2){
+    if (fils1<fils2){
       //printf("echange fils 1 et pere, il existe 2 fils\n");
       tas [i] = fils1;
       tas[j] = pere;
@@ -95,12 +96,17 @@ void descendreTas (T_SOMMET** tas, int n) {
       tas[k] = pere;
       i = 2*(i+1);
     }
+    }
+    else{
+            return;
+    }
     j = 2*(i+1)-1;
     k = 2*(i+1);
     fils1 = tas[j];
     fils2 = tas[k];
     pere = tas[i];
 
+	//printf("%d\n",i);
   }
 }
 
@@ -111,7 +117,7 @@ void supprimeSommetTas(T_SOMMET** tas, int* pn){
   tas[0] = tas [n-1];
   tas[n-1] = temp;
   *pn -= 1;
-  descendreTas(tas,n-1);
+  descendreTas(tas,*pn);
 }
 
 T_SOMMET* popTas(T_SOMMET** tas, int* pn){
@@ -147,16 +153,16 @@ void supprimerElementYTas(T_SOMMET** tas, int* pn, int y){
     return;
   }
  
-  while((i<n && (j<n||k<n) )&& ( (fils1 !=NULL &&pere->F > fils1->F) || (fils2!=NULL && pere->F > fils2->F) ) ){
-    printf("le tas, i = %d \n",i);
+  while((i<n && (j<n||k<n) ) ){
+    //printf("le tas, i = %d \n",i);
     //afficheTas(tas,n);
-    printf("i= %d ; j = %d ; k = %d \n",i,j,k);
+    //printf("i= %d ; j = %d ; k = %d \n",i,j,k);
     if (j>n-1){
       return;
     }
     else if (k>n-1){
       if (fils1->F < pere->F){
-        printf("echange fils 1 et pere, il n'y a qu'un fils\n");
+        //printf("echange fils 1 et pere, il n'y a qu'un fils\n");
         tas[i] = fils1;
         tas[j] = pere;
         i = 2*(i+1)-1;
@@ -165,17 +171,22 @@ void supprimerElementYTas(T_SOMMET** tas, int* pn, int y){
         return;
       }
     }
-    else if (fils1<fils2){
-      printf("echange fils 1 et pere, il existe 2 fils\n");
+    else if ( pere >fils1 || pere > fils2){
+    if (fils1<fils2){
+      //printf("echange fils 1 et pere, il existe 2 fils\n");
       tas [i] = fils1;
       tas[j] = pere;
       i = 2*(i+1)-1;
     }
     else{
-      printf("echange fils 2 et pere, il y a 2 fils\n");
+      //printf("echange fils 2 et pere, il y a 2 fils\n");
       tas[i] = fils2;
       tas[k] = pere;
       i = 2*(i+1);
+    }
+    }
+    else{
+            return;
     }
     j = 2*(i+1)-1;
     k = 2*(i+1);
@@ -183,9 +194,11 @@ void supprimerElementYTas(T_SOMMET** tas, int* pn, int y){
     fils2 = tas[k];
     pere = tas[i];
 
-  } 
+	//printf("%d\n",i);
+  }
 }
 
+  
 int chercheDansTas(T_SOMMET** tas,int n_tas,T_SOMMET* graphe,int sommetCherche){
   int i;
   for (i=0;i<n_tas;i++){
